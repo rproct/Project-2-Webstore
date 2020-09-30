@@ -11,6 +11,8 @@ var bcrypt = require('bcrypt');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
+
+/* SESSION */
 app.use(session({
     secret: 'top secret code!', //doesn't matter what this says
     resave: true,
@@ -21,10 +23,10 @@ app.set('view engine', 'ejs');
 
 
 const connection = mysql.createConnection({
-    host: 'localhost', //local
-    user: '#YOURUSERNAMEFORDB#',
-    password: '#YOURPASSWORDFORDB',
-    database: '#dbName' 
+    host: process.env.HOST, //local
+    user: process.env.USERNAME,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
 });
 connection.connect(); 
 
@@ -58,7 +60,8 @@ function checkPassword(password, hash){
 
 //HOME
 app.get('/', function(req, res){
-    res.render('home');
+    //res.render('home');
+    res.send('home');
 });
 
 
