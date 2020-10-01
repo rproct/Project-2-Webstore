@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('templates/head')%>
+    </head>
+    <body class="bg-light">
+        <%- include('templates/topbar')%>
+
+        <div class="container d-flex flex-wrap">
+            <% for (var i = 0; i < 16; i++) { %>
+                <%- include('templates/product_small')%>
+            <% } %>
+        </div>
+    </body>
+</html>
