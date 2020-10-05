@@ -1,6 +1,6 @@
+drop table if exists shopping_cart;
 drop table if exists user;
 drop table if exists product;
-drop table if exists shopping_cart;
 drop table if exists product_details;
 
 create table user (
@@ -25,7 +25,7 @@ create table product_details (
   create table product (
     product_id           integer primary key AUTO_INCREMENT,
     name                 varchar(30),
-    image                varchar(100),
+    image                varchar(200),
     short_desc           varchar(50),
     carried_quantity     integer,
     product_details_id   integer,
