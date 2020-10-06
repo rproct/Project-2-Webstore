@@ -38,7 +38,7 @@ function isAuthenticated(req, res, next){
 }
 
 function checkUsername(username){
-    let stmt = 'SELECT * FROM users WHERE username=?';
+    let stmt = 'SELECT * FROM user WHERE username=?';
     return new Promise(function(resolve, reject){
        connection.query(stmt, [username], function(error, results){
            if(error) throw error;
@@ -94,24 +94,46 @@ app.post('/login', async function(req, res){
 
 /* Register Routes */
 app.get('/register', function(req, res){
-    res.render('register');
+    let anError = req.query.issue;
+    if(anError == undefined)
+    {
+        anError = "none";
+    }
+    res.render('register', {issue : anError});
 });
 
-app.post('/register', function(req, res){
+app.post('/register', async function(req, res){
+    var firstName = req.body.firstname;
+    var lastName = req.body.lastname;
+    var address = req.body.address;
+    var username = req.body.username;
+    var password = req.body.password;
+    var passwordConfirm = req.body.passwordConfirm;
+    
+    var dbQueryResult = await checkUsername(username);
+    var areSame = password === passwordConfirm;
+    
+    let issueRedirect = "/register?issue=";
+    if(dbQueryResult.length) {
+        res.redirect(issueRedirect + "username+is+already+taken");
+    }
+    
+    if(!areSame) {
+        res.redirect(issueRedirect + "passwords+do+not+match");
+    }
+    
     let salt = 10;
-    bcrypt.hash(req.body.password, salt, function(error, hash){
+    bcrypt.hash(password, salt, function(error, hash){
         if(error) throw error;
-        let stmt = 'INSERT INTO users (username, password) VALUES (?, ?)';
-        let data = [req.body.username, hash];
+        let stmt = 'INSERT INTO user (first_name, last_name, address, username, password, is_admin) VALUES (?, ?, ?, ?, ?, ?)';
+        let data = [firstName, lastName, address, username, hash, false];
         connection.query(stmt, data, function(error, result){
            if(error) throw error;
-           res.redirect('/login');
+           res.redirect('/');
         });
-    });
+    }); 
 });
 //***************************************************************************
-
-
 
 
 
@@ -144,8 +166,8 @@ app.get('/logout', function(req, res){
 //****************************************
 
 //ERROR
-app.get('*', function(req, res){
-   res.render('error'); 
+app.get('/*', function(req, res){
+   res.send('error'); 
 });
 
 app.listen(process.env.PORT || 3000, function(){
