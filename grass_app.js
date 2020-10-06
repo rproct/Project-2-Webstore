@@ -37,6 +37,7 @@ function isAuthenticated(req, res, next){
     else next();
 }
 
+
 function checkUsername(username){
     let stmt = 'SELECT * FROM users WHERE username=?';
     return new Promise(function(resolve, reject){
@@ -144,7 +145,24 @@ app.get('/loginHome', isAuthenticated, function(req, res){
 });
 
 
-
+app.get('/productDetail/:id', function(req, res) {
+    var userQuery = [req.params.id];
+    var stmt = "SELECT * FROM product_details WHERE product_details_id = ?;";
+    
+    connection.query(stmt, userQuery, function(error, result) {
+        if(error) throw error;
+        else{
+            console.log(result); // to see what it is 
+            
+            if(req.session.authenticated){
+                res.render('productDetails', {authenticated: true, username: req.session.name, id: req.session.id, grass: result[0]}); // need a productDetails view
+            }
+            else{
+                res.render('productDetails', {authenticated: false, username: "", id: -1, grass: result[0]});
+            }
+        }
+    });
+});
 
 
 
