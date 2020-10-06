@@ -7,10 +7,9 @@ create table user (
   user_id      integer primary key AUTO_INCREMENT,
   first_name   varchar(20),
   last_name    varchar(20),
-  address      varchar (30),
-  DOB          date,
+  address      varchar (100),
   username     varchar(30) unique,
-  password     varchar(30),
+  password     varchar(60),
   is_admin     boolean
 );
 

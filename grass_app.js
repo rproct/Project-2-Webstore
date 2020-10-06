@@ -134,12 +134,17 @@ app.post('/register', async function(req, res){
     var areSame = password === passwordConfirm;
     
     let issueRedirect = "/register?issue=";
-    if(dbQueryResult.length) {
+    
+    console.log(dbQueryResult.length);
+    
+    if(dbQueryResult.length > 0) {
         res.redirect(issueRedirect + "username+is+already+taken");
+        return;
     }
     
     if(!areSame) {
         res.redirect(issueRedirect + "passwords+do+not+match");
+        return;
     }
     
     let salt = 10;
