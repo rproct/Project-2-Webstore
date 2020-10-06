@@ -135,8 +135,6 @@ app.post('/register', async function(req, res){
     
     let issueRedirect = "/register?issue=";
     
-    console.log(dbQueryResult.length);
-    
     if(dbQueryResult.length > 0) {
         res.redirect(issueRedirect + "username+is+already+taken");
         return;
