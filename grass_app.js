@@ -135,16 +135,19 @@ app.post('/register', async function(req, res){
     
     let issueRedirect = "/register?issue=";
     
+    //If the db has a record with the username, we will redirect to the register and let the user know.
     if(dbQueryResult.length > 0) {
         res.redirect(issueRedirect + "username+is+already+taken");
         return;
     }
     
+    //If the passwords do no match, the user will be redirected back to the register page and will see a message
     if(!areSame) {
         res.redirect(issueRedirect + "passwords+do+not+match");
         return;
     }
     
+    //create user and save in the DB
     let salt = 10;
     bcrypt.hash(password, salt, function(error, hash){
         if(error) throw error;
