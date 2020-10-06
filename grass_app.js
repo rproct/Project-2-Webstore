@@ -64,10 +64,30 @@ app.get('/', function(req, res){
     res.send('home');
 });
 
+//*************************************************************** Product queries
+app.get('/getProductSearch/:string', function(req, res) {
+    var userQuery = [req.params.string];
+    var stmt = 'SELECT * FROM product WHERE name LIKE CONCAT("%", ?, "%");'; // had to use concat!
 
+    connection.query(stmt, userQuery, function(error, result) {
+        if(error) throw error;
+        console.log(result); // just to see what it is
+        
+        res.json({grasses:result[0]});
+    });
+});
 
-
-
+app.get('/getSpecificSearch/:id', function(req, res) {
+    var userQuery = [req.params.id];
+    var stmt = "SELECT * FROM product_details WHERE product_details_id = ?;";
+    
+    connection.query(stmt, userQuery, function(error, result) {
+        if(error) throw error;
+        console.log(result); // just to see what it is 
+        
+        res.json({grass:result[0]});
+    });
+});
 
 
 
