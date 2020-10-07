@@ -1,0 +1,27 @@
+/*edits what's in jumbotron*/
+h1{
+    font-family: 'Sen', sans-serif;
+}
+p, label{
+    font-family: 'Quicksand', sans-serif;
+}
+
+jumbotron {
+    text-align: center !important;
+    justify-content: center;
+}
+
+h3 {
+    text-align: center;
+}
+
+
+.h4, h4{
+    padding-left: 300px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+hr{
+    border: 3px solid rgb(0, 115, 153);
+    border-radius: 5px;
+}
