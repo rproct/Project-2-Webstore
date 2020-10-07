@@ -189,7 +189,7 @@ app.get('/productDetail/:id/:productId', function(req, res) {
                 else{
                     console.log(result2);
                     if(req.session.authenticated){
-                        res.render('productDetails', {authenticated: true, username: req.session.user, id: req.session.userId, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
+                        res.render('productDetails', {authenticated: true, username: req.session.user, id: req.session.id, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
                     }
                     else{
                         res.render('productDetails', {authenticated: false, username: "", id: -1, grassSpecific: result1[0], grassGeneral: result2[0]});
