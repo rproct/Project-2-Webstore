@@ -6,6 +6,15 @@ p, label{
     font-family: 'Quicksand', sans-serif;
 }
 
+jumbotron {
+    text-align: center !important;
+    justify-content: center;
+}
+
+h3 {
+    text-align: center;
+}
+
 
 .h4, h4{
     padding-left: 300px;
