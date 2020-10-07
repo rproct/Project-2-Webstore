@@ -169,7 +169,7 @@ app.post('/register', async function(req, res){
 
 /* Home Route (with login) */
 app.get('/loginHome', isAuthenticated, function(req, res){
-    res.render('loginHome', {user: req.session.user});
+    res.send("home");
 });
 
 
