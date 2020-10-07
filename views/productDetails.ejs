@@ -1,0 +1,15 @@
+<%if(authenticated){%>
+    <h3>User logged in.</h3>
+    <h3><%=username%></h3>
+    <h2><%=id%></h2>
+<%}else{%>
+    <h3>User not logged in.</h3>
+<%}%>
+
+
+<h2><%=grassGeneral.name%></h2>
+<img src=<%=grassGeneral.image%> width="200px" height="200px" >
+<h3><%=grassSpecific.price%></h3>
+<h3>Carrying: <%=grassGeneral.carried_quantity%> at <%=grassSpecific.sq_ft%> ft<sup>2</sup> a piece.</h3>
+<h4><%=grassSpecific.color%></h4>
+<h4><%=grassSpecific.long_description%></h4>

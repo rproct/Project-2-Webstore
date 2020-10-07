@@ -173,21 +173,29 @@ app.get('/loginHome', isAuthenticated, function(req, res){
 });
 
 
-app.get('/productDetail/:id', function(req, res) {
+app.get('/productDetail/:id/:productId', function(req, res) {
     var userQuery = [req.params.id];
     var stmt = "SELECT * FROM product_details WHERE product_details_id = ?;";
     
-    connection.query(stmt, userQuery, function(error, result) {
-        if(error) throw error;
+    connection.query(stmt, userQuery, function(error1, result1) {
+        if(error1) throw error1;
         else{
-            console.log(result); // to see what it is 
+            console.log(result1); // to see what it is 
             
-            if(req.session.authenticated){
-                res.render('productDetails', {authenticated: true, username: req.session.name, id: req.session.id, grass: result[0]}); // need a productDetails view
-            }
-            else{
-                res.render('productDetails', {authenticated: false, username: "", id: -1, grass: result[0]});
-            }
+            var userQuery2 = [req.params.id];
+            var stmt2 = "SELECT * FROM product WHERE product_id = ?;"
+            connection.query(stmt2, userQuery2, function(error2, result2) {
+                if(error2) throw error2;
+                else{
+                    console.log(result2);
+                    if(req.session.authenticated){
+                        res.render('productDetails', {authenticated: true, username: req.session.name, id: req.session.id, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
+                    }
+                    else{
+                        res.render('productDetails', {authenticated: false, username: "", id: -1, grassSpecific: result1[0], grassGeneral: result2[0]});
+                    }
+                }
+            })
         }
     });
 });
