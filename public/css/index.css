@@ -1,0 +1,13 @@
+h1#sitename{
+    font-family: 'Pacifico', cursive;
+    color: darkgreen;
+}
+
+div.productSm{
+    width: 25%;
+    box-shadow: 0px 5px 5px grey;
+}
+
+img.productPic{
+    width: 100%;
+}
