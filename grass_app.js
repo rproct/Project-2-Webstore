@@ -11,6 +11,8 @@ var bcrypt = require('bcrypt');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
+
+/* SESSION */
 app.use(session({
     secret: 'top secret code!', //doesn't matter what this says
     resave: true,
@@ -21,10 +23,10 @@ app.set('view engine', 'ejs');
 
 
 const connection = mysql.createConnection({
-    host: 'localhost', //local
-    user: '#YOURUSERNAMEFORDB#',
-    password: '#YOURPASSWORDFORDB',
-    database: '#dbName' 
+    host: process.env.HOST, //local
+    user: process.env.USERNAME,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
 });
 connection.connect(); 
 
@@ -35,8 +37,9 @@ function isAuthenticated(req, res, next){
     else next();
 }
 
+
 function checkUsername(username){
-    let stmt = 'SELECT * FROM users WHERE username=?';
+    let stmt = 'SELECT * FROM user WHERE username=?';
     return new Promise(function(resolve, reject){
        connection.query(stmt, [username], function(error, results){
            if(error) throw error;
@@ -58,13 +61,34 @@ function checkPassword(password, hash){
 
 //HOME
 app.get('/', function(req, res){
-    res.render('home');
+    //res.render('home');
+    res.send('home');
 });
 
+//*************************************************************** Product queries
+app.get('/getProductSearch/:string', function(req, res) {
+    var userQuery = [req.params.string];
+    var stmt = 'SELECT * FROM product WHERE name LIKE CONCAT("%", ?, "%");'; // had to use concat!
 
+    connection.query(stmt, userQuery, function(error, result) {
+        if(error) throw error;
+        console.log(result); // just to see what it is
+        
+        res.json({grasses:result[0]});
+    });
+});
 
-
-
+app.get('/getSpecificSearch/:id', function(req, res) {
+    var userQuery = [req.params.id];
+    var stmt = "SELECT * FROM product_details WHERE product_details_id = ?;";
+    
+    connection.query(stmt, userQuery, function(error, result) {
+        if(error) throw error;
+        console.log(result); // just to see what it is 
+        
+        res.json({grass:result[0]});
+    });
+});
 
 
 
@@ -82,6 +106,7 @@ app.post('/login', async function(req, res){
     if(passwordMatch){
         req.session.authenticated = true;
         req.session.user = isUserExist[0].username;
+        req.session.userId = isUserExist[0].user_id;
         res.redirect('/loginHome');
     }
     else{
@@ -91,24 +116,52 @@ app.post('/login', async function(req, res){
 
 /* Register Routes */
 app.get('/register', function(req, res){
-    res.render('register');
+    let anError = req.query.issue;
+    if(anError == undefined)
+    {
+        anError = "none";
+    }
+    res.render('register', {issue : anError});
 });
 
-app.post('/register', function(req, res){
+app.post('/register', async function(req, res){
+    var firstName = req.body.firstname;
+    var lastName = req.body.lastname;
+    var address = req.body.address;
+    var username = req.body.username;
+    var password = req.body.password;
+    var passwordConfirm = req.body.passwordConfirm;
+    
+    var dbQueryResult = await checkUsername(username);
+    var areSame = password === passwordConfirm;
+    
+    let issueRedirect = "/register?issue=";
+    
+    //If the db has a record with the username, we will redirect to the register and let the user know.
+    if(dbQueryResult.length > 0) {
+        res.redirect(issueRedirect + "username+is+already+taken");
+        return;
+    }
+    
+    //If the passwords do no match, the user will be redirected back to the register page and will see a message
+    if(!areSame) {
+        res.redirect(issueRedirect + "passwords+do+not+match");
+        return;
+    }
+    
+    //create user and save in the DB
     let salt = 10;
-    bcrypt.hash(req.body.password, salt, function(error, hash){
+    bcrypt.hash(password, salt, function(error, hash){
         if(error) throw error;
-        let stmt = 'INSERT INTO users (username, password) VALUES (?, ?)';
-        let data = [req.body.username, hash];
+        let stmt = 'INSERT INTO user (first_name, last_name, address, username, password, is_admin) VALUES (?, ?, ?, ?, ?, ?)';
+        let data = [firstName, lastName, address, username, hash, false];
         connection.query(stmt, data, function(error, result){
            if(error) throw error;
-           res.redirect('/login');
+           res.redirect('/');
         });
-    });
+    }); 
 });
 //***************************************************************************
-
-
 
 
 
@@ -117,11 +170,36 @@ app.post('/register', function(req, res){
 
 /* Home Route (with login) */
 app.get('/loginHome', isAuthenticated, function(req, res){
-    res.render('loginHome', {user: req.session.user});
+    res.send("home");
 });
 
 
-
+app.get('/productDetail/:id/:productId', function(req, res) {
+    var userQuery = [req.params.id];
+    var stmt = "SELECT * FROM product_details WHERE product_details_id = ?;";
+    
+    connection.query(stmt, userQuery, function(error1, result1) {
+        if(error1) throw error1;
+        else{
+            console.log(result1); // to see what it is 
+            
+            var userQuery2 = [req.params.id];
+            var stmt2 = "SELECT * FROM product WHERE product_id = ?;"
+            connection.query(stmt2, userQuery2, function(error2, result2) {
+                if(error2) throw error2;
+                else{
+                    console.log(result2);
+                    if(req.session.authenticated){
+                        res.render('productDetails', {authenticated: true, username: req.session.user, id: req.session.userId, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
+                    }
+                    else{
+                        res.render('productDetails', {authenticated: false, username: "", id: -1, grassSpecific: result1[0], grassGeneral: result2[0]});
+                    }
+                }
+            })
+        }
+    });
+});
 
 
 
@@ -141,8 +219,8 @@ app.get('/logout', function(req, res){
 //****************************************
 
 //ERROR
-app.get('*', function(req, res){
-   res.render('error'); 
+app.get('/*', function(req, res){
+   res.send('error'); 
 });
 
 app.listen(process.env.PORT || 3000, function(){
