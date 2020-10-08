@@ -105,8 +105,7 @@ app.post('/login', async function(req, res){
     let passwordMatch = await checkPassword(req.body.password, hashedPasswd);
     if(passwordMatch){
         req.session.authenticated = true;
-        req.session.user = isUserExist[0].username;
-        req.session.userId = isUserExist[0].user_id;
+        req.session.userInfo = isUserExist[0];
         res.redirect('/loginHome');
     }
     else{
@@ -190,10 +189,12 @@ app.get('/productDetail/:id/:productId', function(req, res) {
                 else{
                     console.log(result2);
                     if(req.session.authenticated){
-                        res.render('productDetails', {authenticated: true, username: req.session.user, id: req.session.userId, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
+                        
+                        console.log(req.session.boob);
+                        res.render('productDetails', {authenticated: true, user: req.session.userInfo, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
                     }
                     else{
-                        res.render('productDetails', {authenticated: false, username: "", id: -1, grassSpecific: result1[0], grassGeneral: result2[0]});
+                        res.render('productDetails', {authenticated: false, grassSpecific: result1[0], grassGeneral: result2[0]});
                     }
                 }
             })
