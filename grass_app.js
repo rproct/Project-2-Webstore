@@ -72,9 +72,13 @@ app.get('/getProductSearch/:string', function(req, res) {
 
     connection.query(stmt, userQuery, function(error, result) {
         if(error) throw error;
-        console.log(result); // just to see what it is
+        console.log(JSON.stringify({grasses:result})); // just to see what it is
         
-        res.json({grasses:result[0]});
+        // res.json({grasses:result});
+        res.render('search', {
+            term: userQuery,
+            grass: result
+        })
     });
 });
 
@@ -86,7 +90,7 @@ app.get('/getSpecificSearch/:id', function(req, res) {
         if(error) throw error;
         console.log(result); // just to see what it is 
         
-        res.json({grass:result[0]});
+        res.json({grass:result});
     });
 });
 

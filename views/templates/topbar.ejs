@@ -5,11 +5,12 @@
                 Grassland
             </h1>
         </div>
-        <div class="col-md-7 row align-items-center">
-            <div class="form-group col-md-10 m-0 p-0">
-                <input type="search" class="form-control" placeholder="See what we got!">
-            </div>
-            <button type="submit" class="btn btn-success col-md-2">Search!</button>
+        <div class="col-md-7 mt-2">
+            <form class="row" action="/getProductSearch/" method="get">
+<!--                col-md-10-->
+                <input type="search" class="form-control col-md-10" placeholder="See what we got!" value="<%= query %>">
+                <button type="submit" class="btn btn-success col-md-2">Search!</button>
+            </form>
         </div>
         <div class="col-md-1 m-auto">
             <a href="#">Sign In</a>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <%- include('templates/head')%>
+    </head>
+
+    <body class="bg-light">
+        <%- include('templates/topbar', {query: term})%>
+        <div class="container">
+            <% for(var i = 0; i < grass.length; i++) {%>
+                <%- include('templates/productSearch', {currentGrass: grass[i]})%>
+            <%}%>
+        </div>
+<!--        <p>-->
+<!--            <%= JSON.stringify(grass)%>-->
+<!--            <% for(var i = 0; i < grass.length; i++) {%>-->
+<!--                <tr>-->
+<!--                    <td><%= grass[i].name %></td>-->
+<!--                    <td><%= grass[i].image%></td>-->
+<!--                </tr>-->
+<!--            <%}%>-->
+<!--        </p>-->
+    </body>
+
+</html>
