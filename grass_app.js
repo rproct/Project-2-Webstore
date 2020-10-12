@@ -165,7 +165,6 @@ app.post('/register', async function(req, res){
 
 
 
-//--------------------------------------- PATHS BUT LOGGED IN
 
 /* Home Route (with login) */
 app.get('/loginHome', isAuthenticated, function(req, res){
@@ -183,7 +182,7 @@ app.get('/productDetail/:id/:productId', function(req, res) {
             console.log(result1); // to see what it is 
             
             var userQuery2 = [req.params.id];
-            var stmt2 = "SELECT * FROM product WHERE product_id = ?;"
+            var stmt2 = "SELECT * FROM product WHERE product_id = ?;";
             connection.query(stmt2, userQuery2, function(error2, result2) {
                 if(error2) throw error2;
                 else{
@@ -196,12 +195,25 @@ app.get('/productDetail/:id/:productId', function(req, res) {
                         res.render('productDetails', {authenticated: false, grassSpecific: result1[0], grassGeneral: result2[0]});
                     }
                 }
-            })
+            });
         }
     });
 });
 
-
+app.get('/userCart', isAuthenticated, function(req, res) {
+    var user = [req.session.userInfo.id];
+    var stmt = "SELECT *" + 
+    " from (SELECT shopping_cart.user_id, shopping_cart.cart_id, shopping_cart.product_id, shopping_cart.quantity, product.image, product.name, product.short_desc"+
+    " FROM shopping_cart inner join product on shopping_cart.product_id=product.product_id) as tbl1 where tbl1.user_id= ?;";
+    // FROM SELECT * FROM shopping_cart WHERE user_id=?;
+    connection.query(stmt, user, function(error, result) {
+        if(error) throw error;
+        else{
+            console.log();
+            res.render('userCart', {user: req.session.userInfo, grasses: result});
+        }
+    });
+});
 
 
 

@@ -1,0 +1,10 @@
+<h3><%=user.username%></h3>
+<h3><%=user.user_id%></h3>
+
+<ul>
+<%grasses.forEach(function(g){%>
+    <li><%=g.product_id%></li>
+    <li><%=g.quantity%></li>
+<%});%>
+        
+</ul>
