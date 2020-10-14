@@ -72,13 +72,9 @@ app.get('/getProductSearch/:string', function(req, res) {
 
     connection.query(stmt, userQuery, function(error, result) {
         if(error) throw error;
-        console.log(JSON.stringify({grasses:result})); // just to see what it is
+        console.log(result); // just to see what it is
         
-        // res.json({grasses:result});
-        res.render('search', {
-            term: userQuery,
-            grass: result
-        })
+        res.json({grasses:result[0]});
     });
 });
 
@@ -90,11 +86,73 @@ app.get('/getSpecificSearch/:id', function(req, res) {
         if(error) throw error;
         console.log(result); // just to see what it is 
         
-        res.json({grass:result});
+        res.json({grass:result[0]});
     });
 });
 
 
+app.get('/userCartAdd/:id/:amount', isAuthenticated, function(req, res) {
+    var user = req.session.userInfo;
+    var stmt = 'insert into shopping_cart (product_id, user_id, quantity) values (?, ?, ?)';
+    var data = [req.params.id, user.user_id, req.params.amount];
+    
+    connection.query(stmt, data, function(error, result) {
+       if(error) throw error;
+    });
+    
+    var stmt2 = 'update product set carried_quantity = carried_quantity - ? where product_id = ?';
+    var data2 = [req.params.amount, req.params.id]
+    
+    connection.query(stmt2, data2, function(error, result) {
+        if(error) throw error;
+        
+        res.json({newGrass:result[0]});
+    });
+});
+
+app.get('/userCartDelete/:id/:amount', isAuthenticated, function(req, res) {
+    var stmt = 'delete from shopping_cart where cart_id = ?;';
+    
+    connection.query(stmt, req.params.id, function(error, result) {
+        if(error) throw error;
+    });
+    
+    var stmt2 = 'update product set carried_quantity = carried_quantity + ? where product_id = ?';
+    var data2 = [req.params.amount, req.params.id]
+    
+    connection.query(stmt2, data2, function(error, result) {
+        if(error) throw error;
+       
+       res.json({newGrass:result[0]});
+    });
+});
+
+
+/* Used for testing the userCart add and delete
+app.get('/userCS/', isAuthenticated, function(req, res) {
+    var userQuery = [req.params.id];
+    var stmt = "SELECT * FROM shopping_cart";
+    
+    var yes;
+    
+    connection.query(stmt, function(error, result) {
+        if(error) throw error;
+        console.log(result);
+        
+        yes = result;
+    });
+    
+    var userQuery = [req.params.id];
+    var stmt = "SELECT * FROM product";
+    
+    connection.query(stmt, function(error, result) {
+        if(error) throw error;
+        console.log(result);
+        
+        res.json({grass:result, newGRASSSSS:yes});
+    });
+});
+*/
 
 //*************************************************************** Login and Register Routes
 
@@ -109,8 +167,7 @@ app.post('/login', async function(req, res){
     let passwordMatch = await checkPassword(req.body.password, hashedPasswd);
     if(passwordMatch){
         req.session.authenticated = true;
-        req.session.user = isUserExist[0].username;
-        req.session.userId = isUserExist[0].user_id;
+        req.session.userInfo = isUserExist[0];
         res.redirect('/loginHome');
     }
     else{
@@ -170,8 +227,7 @@ app.post('/register', async function(req, res){
 
 
 
-//--------------------------------------- PATHS BUT LOGGED IN
-
+t 
 /* Home Route (with login) */
 app.get('/loginHome', isAuthenticated, function(req, res){
     res.send("home");
@@ -188,26 +244,38 @@ app.get('/productDetail/:id/:productId', function(req, res) {
             console.log(result1); // to see what it is 
             
             var userQuery2 = [req.params.id];
-            var stmt2 = "SELECT * FROM product WHERE product_id = ?;"
+            var stmt2 = "SELECT * FROM product WHERE product_id = ?;";
             connection.query(stmt2, userQuery2, function(error2, result2) {
                 if(error2) throw error2;
                 else{
                     console.log(result2);
                     if(req.session.authenticated){
-                        res.render('productDetails', {authenticated: true, username: req.session.user, id: req.session.userId, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
+                        
+                        res.render('productDetails', {authenticated: true, user: req.session.userInfo, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
                     }
                     else{
-                        res.render('productDetails', {authenticated: false, username: "", id: -1, grassSpecific: result1[0], grassGeneral: result2[0]});
+                        res.render('productDetails', {authenticated: false, grassSpecific: result1[0], grassGeneral: result2[0]});
                     }
                 }
-            })
+            });
         }
     });
 });
 
-
-
-
+app.get('/userCart', isAuthenticated, function(req, res) {
+    var user = [req.session.userInfo.id];
+    var stmt = "SELECT *" + 
+    " from (SELECT shopping_cart.user_id, shopping_cart.cart_id, shopping_cart.product_id, shopping_cart.quantity, product.image, product.name, product.short_desc"+
+    " FROM shopping_cart inner join product on shopping_cart.product_id=product.product_id) as tbl1 where tbl1.user_id= ?;";
+    // FROM SELECT * FROM shopping_cart WHERE user_id=?;
+    connection.query(stmt, user, function(error, result) {
+        if(error) throw error;
+        else{
+            console.log();
+            res.render('userCart', {user: req.session.userInfo, grasses: result});
+        }
+    });
+});
 
 
 

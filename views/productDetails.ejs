@@ -1,7 +1,7 @@
 <%if(authenticated){%>
     <h3>User logged in.</h3>
-    <h3><%=username%></h3>
-    <h2><%=id%></h2>
+    <h3><%=user.username%></h3>
+    <h2><%=user.user_id%></h2>
 <%}else{%>
     <h3>User not logged in.</h3>
 <%}%>
