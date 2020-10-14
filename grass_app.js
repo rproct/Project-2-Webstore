@@ -227,7 +227,6 @@ app.post('/register', async function(req, res){
 
 
 
-t 
 /* Home Route (with login) */
 app.get('/loginHome', isAuthenticated, function(req, res){
     res.send("home");
