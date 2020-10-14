@@ -91,6 +91,68 @@ app.get('/getSpecificSearch/:id', function(req, res) {
 });
 
 
+app.get('/userCartAdd/:id/:amount', isAuthenticated, function(req, res) {
+    var user = req.session.userInfo;
+    var stmt = 'insert into shopping_cart (product_id, user_id, quantity) values (?, ?, ?)';
+    var data = [req.params.id, user.user_id, req.params.amount];
+    
+    connection.query(stmt, data, function(error, result) {
+       if(error) throw error;
+    });
+    
+    var stmt2 = 'update product set carried_quantity = carried_quantity - ? where product_id = ?';
+    var data2 = [req.params.amount, req.params.id]
+    
+    connection.query(stmt2, data2, function(error, result) {
+        if(error) throw error;
+        
+        res.json({newGrass:result[0]});
+    });
+});
+
+app.get('/userCartDelete/:id/:amount', isAuthenticated, function(req, res) {
+    var stmt = 'delete from shopping_cart where cart_id = ?;';
+    
+    connection.query(stmt, req.params.id, function(error, result) {
+        if(error) throw error;
+    });
+    
+    var stmt2 = 'update product set carried_quantity = carried_quantity + ? where product_id = ?';
+    var data2 = [req.params.amount, req.params.id]
+    
+    connection.query(stmt2, data2, function(error, result) {
+        if(error) throw error;
+       
+       res.json({newGrass:result[0]});
+    });
+});
+
+
+/* Used for testing the userCart add and delete
+app.get('/userCS/', isAuthenticated, function(req, res) {
+    var userQuery = [req.params.id];
+    var stmt = "SELECT * FROM shopping_cart";
+    
+    var yes;
+    
+    connection.query(stmt, function(error, result) {
+        if(error) throw error;
+        console.log(result);
+        
+        yes = result;
+    });
+    
+    var userQuery = [req.params.id];
+    var stmt = "SELECT * FROM product";
+    
+    connection.query(stmt, function(error, result) {
+        if(error) throw error;
+        console.log(result);
+        
+        res.json({grass:result, newGRASSSSS:yes});
+    });
+});
+*/
 
 //*************************************************************** Login and Register Routes
 
@@ -214,8 +276,6 @@ app.get('/userCart', isAuthenticated, function(req, res) {
         }
     });
 });
-
-
 
 
 
