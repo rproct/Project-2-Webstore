@@ -67,7 +67,7 @@ app.get('/', function(req, res){
     } else {
         user = null;
     }
-    res.render('home', {query : "", user : user});
+    res.render('home', {query : "", loggedIn : req.session.authenticated});
 });
 
 //*************************************************************** Product queries
