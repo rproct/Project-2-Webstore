@@ -6,9 +6,9 @@
             </h1>
         </div>
         <div class="col-md-7 mt-2">
-            <form class="row" action="/getProductSearch/" method="get">
+            <form class="row" action="/getProductSearch" method="GET">
 
-                <input type="search" class="form-control col-md-10" placeholder="See what we got!" value="<%= query %>">
+                <input type="search" class="form-control col-md-10" id='keywords' name='keywords' placeholder="See what we got!">
                 <button type="submit" class="btn btn-success col-md-2">Search!</button>
             </form>
         </div>

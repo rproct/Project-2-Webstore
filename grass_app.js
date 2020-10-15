@@ -71,15 +71,18 @@ app.get('/', function(req, res){
 });
 
 //*************************************************************** Product queries
-app.get('/getProductSearch/:string', function(req, res) {
-    var userQuery = [req.params.string];
+app.get('/getProductSearch', function(req, res) {
+    console.log(req.query.keywords === "")
+    let keywords = req.query.keywords.split(" ");
+    console.log(keywords.length);
+    var userQuery = [req.query.keywords];
     var stmt = 'SELECT * FROM product WHERE name LIKE CONCAT("%", ?, "%");'; // had to use concat!
 
     connection.query(stmt, userQuery, function(error, result) {
         if(error) throw error;
         console.log(result); // just to see what it is
         
-        res.json({grasses:result[0]});
+        res.json({grasses:result});
     });
 });
 
