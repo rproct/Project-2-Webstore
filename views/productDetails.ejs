@@ -1,3 +1,5 @@
+<%- include ('templates/head'); -%>
+
 <script src="https://code.jquery.com/jquery.min.js"></script>
 
 
@@ -33,4 +35,34 @@
     <a  href='/login'><button>Button</button></a>
 <%}%>
 
-<script type="text/javascript" SRC="javascript/userAdd.js"></script>
+<script>
+function addsItem(id){
+    console.log("THE JAVASCRIPT IS HERE MFs");
+    var amount = $("#thing").val();
+
+        $(document).ready(function(){
+    
+        $.ajax({
+        method:   "GET",
+        url:      "/userCartAdd/" + id + "/" + amount, //userCartAdd/:id/:amount
+        dataType: "json",
+            success: function(result) {
+                console.log(result);
+                console.log("YES ITS ADDED MFs");
+                
+                // $("#"+id).append("<h5>Deleted<h5>");
+                alert("Your item has being added");
+                
+            },
+            error: function(err){
+                console.log(err);
+            }
+        });
+        
+    });
+    
+}
+</script>
+
+
+
