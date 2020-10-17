@@ -6,10 +6,12 @@
     </head>
 
     <body class="bg-light">
-        <%- include('templates/topbar', {query: term})%>
+        <%- include('templates/topbar', {query: term, loggedIn : loggedIn})%>
         <div class="container">
             <% for(var i = 0; i < grass.length; i++) {%>
-                <%- include('templates/productSearch', {currentGrass: grass[i]})%>
+                <a href='/productDetail/<%= grass[i].product_id %>/<%= grass[i].product_details_id %>'>
+                    <%- include('templates/productSearch', {currentGrass: grass[i]})%>
+                </a>
             <%}%>
         </div>
 <!--        <p>-->

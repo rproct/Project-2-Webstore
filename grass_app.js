@@ -61,28 +61,34 @@ function checkPassword(password, hash){
 
 //HOME
 app.get('/', function(req, res){
-    var user;
-    if(req.session.authenticated === true) {
-        user = req.session.userInfo;
-    } else {
-        user = null;
-    }
     res.render('home', {query : "", loggedIn : req.session.authenticated});
 });
 
 //*************************************************************** Product queries
 app.get('/getProductSearch', function(req, res) {
-    console.log(req.query.keywords === "")
-    let keywords = req.query.keywords.split(" ");
-    console.log(keywords.length);
-    var userQuery = [req.query.keywords];
-    var stmt = 'SELECT * FROM product WHERE name LIKE CONCAT("%", ?, "%");'; // had to use concat!
-
-    connection.query(stmt, userQuery, function(error, result) {
+    var keywords = req.query.keywords.split(" ");
+    keywords = keywords.filter(Boolean);
+    let query_len = keywords.length;
+    
+    if(query_len === 0) {
+        keywords.push("");
+        query_len++;
+    }
+    
+    var stmt = 'SELECT * FROM product WHERE name LIKE CONCAT("%", ?, "%")'; // had to use concat!
+    
+    if(query_len > 1) {
+        for(var i = 1; i < query_len; i++) {
+            stmt += 'OR name LIKE CONCAT("%", ?, "%")';
+        }
+    }
+    stmt += ";";
+    
+    connection.query(stmt, keywords, function(error, result) {
         if(error) throw error;
         console.log(result); // just to see what it is
         
-        res.json({grasses:result});
+        res.render('search', {grass : result, term : req.query.keywords, loggedIn : req.session.authenticated})
     });
 });
 
