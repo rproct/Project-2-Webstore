@@ -1,3 +1,6 @@
+<script src="https://code.jquery.com/jquery.min.js"></script>
+
+
 <%if(authenticated){%>
     <h3>User logged in.</h3>
     <h3><%=user.username%></h3>
@@ -13,3 +16,21 @@
 <h3>Carrying: <%=grassGeneral.carried_quantity%> at <%=grassSpecific.sq_ft%> ft<sup>2</sup> a piece.</h3>
 <h4><%=grassSpecific.color%></h4>
 <h4><%=grassSpecific.long_description%></h4>
+
+
+
+
+<%if(authenticated){%>
+    <!--<form action='addItem'>-->
+        <!--<label>amount</label>-->
+        <input id="thing" type="text">
+        <!--<label>id</label>-->
+
+        <!--<input type="submit" value="Submit">-->
+    <!--</form>-->
+    <button onclick='addsItem(<%=grassGeneral.product_id%>)'>Button</button>
+<%}else{%>
+    <a  href='/login'><button>Button</button></a>
+<%}%>
+
+<script type="text/javascript" SRC="javascript/userAdd.js"></script>

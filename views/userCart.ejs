@@ -1,10 +1,22 @@
+<script src="https://code.jquery.com/jquery.min.js"></script>
+
+<h2>User Cart</h2>
+
 <h3><%=user.username%></h3>
 <h3><%=user.user_id%></h3>
 
+
+
 <ul>
 <%grasses.forEach(function(g){%>
-    <li><%=g.product_id%></li>
-    <li><%=g.quantity%></li>
+    <div id='<%=g.product_id%>'>
+        <h5><%=g.name%></h5>
+        <li><%=g.product_id%></li>
+        <li><%=g.quantity%></li>
+        <button onclick='deleteItem(<%=g.product_id%>, <%=g.quantity%>)'>Button</button>
+    </div>
 <%});%>
-        
+
 </ul>
+
+<script SRC="javascript/remove.js"></script>

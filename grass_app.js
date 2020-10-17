@@ -241,7 +241,7 @@ app.get('/loginHome', isAuthenticated, function(req, res){
 });
 
 
-app.get('/productDetail/:id/:productId', function(req, res) {
+app.get('/productDetail/:id/:productId', function(req, res) { // first Id is the specific id, and then the product
     var userQuery = [req.params.id];
     var stmt = "SELECT * FROM product_details WHERE product_details_id = ?;";
     
@@ -269,8 +269,8 @@ app.get('/productDetail/:id/:productId', function(req, res) {
     });
 });
 
-app.get('/userCart', isAuthenticated, function(req, res) {
-    var user = [req.session.userInfo.id];
+app.get('/userCart', function(req, res) {
+    var user = [req.session.userInfo.user_id];
     var stmt = "SELECT *" + 
     " from (SELECT shopping_cart.user_id, shopping_cart.cart_id, shopping_cart.product_id, shopping_cart.quantity, product.image, product.name, product.short_desc"+
     " FROM shopping_cart inner join product on shopping_cart.product_id=product.product_id) as tbl1 where tbl1.user_id= ?;";
@@ -278,7 +278,7 @@ app.get('/userCart', isAuthenticated, function(req, res) {
     connection.query(stmt, user, function(error, result) {
         if(error) throw error;
         else{
-            console.log();
+            console.log(result);
             res.render('userCart', {user: req.session.userInfo, grasses: result});
         }
     });
