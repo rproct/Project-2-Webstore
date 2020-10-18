@@ -1,0 +1,2 @@
+insert into user (user_id, first_name, last_name, address, username, password, is_admin) VALUES
+(0, "Adminn", "nnimda", "404 Null St.", "Admin1", "$2b$10$ibMA0JDKAFg7qy2sKBF5v.8wNV/5Wp3cokDOQcNjBLfJgTdJMkAQS", true);

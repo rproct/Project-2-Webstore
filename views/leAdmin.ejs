@@ -1,0 +1,20 @@
+<script src="https://code.jquery.com/jquery.min.js"></script>
+
+<h2>Admin??</h2>
+
+<ul>
+    <%grasses.forEach(function(g){%>
+        <div>
+            <h5><%=g.name%></h5>
+            <li><%=g.product_id%></li>
+            <li id="li<%=g.product_id%>"><%=g.carried_quantity%></li>
+            
+            <input id='thing<%=g.product_id%>' type="text">
+            
+            <button onclick='addAmount(<%=g.product_id%>)'>Add by</button>
+            <button onclick='subAmount(<%=g.product_id%>)'>Sub by</button>
+        </div>
+    <%});%>
+</ul>
+
+<script SRC="javascript/adminAdd.js"></script>

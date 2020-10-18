@@ -285,6 +285,68 @@ app.get('/userCart', function(req, res) {
 });
 
 
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- Admin route!
+app.get('/leAdmin', function(req, res) {
+    
+    try { // many answers to the same thing
+        if(!(req.session.userInfo.is_admin)){
+            res.render('home', {query : "", loggedIn : req.session.authenticated});
+        }
+        else{
+            var stmt = "select * from product;";
+            connection.query(stmt, function(error, result){
+                if(error) throw error;
+                else{
+                    console.log("admin logged in");
+                    res.render('leAdmin', {grasses: result});
+                }
+            });
+        }
+    }
+    catch(err) {
+        console.log("Failed to sign in");
+        res.render('home', {query : "", loggedIn : req.session.authenticated});
+    }
+
+    
+});
+
+app.get('/adminAdd/:id/:quantity', isAuthenticated, function(req, res) { // id is from product
+
+    if(req.session.userInfo.is_admin){
+        var stmt2 = 'update product set carried_quantity = carried_quantity + ? where product_id = ?';
+        var data2 = [req.params.quantity, req.params.id];
+        
+        connection.query(stmt2, data2, function(error, result) {
+            if(error) res.json({newGrass:error[0]});
+            else{
+                res.json({newGrass:result[0]});
+            }
+        });
+    }
+    else{
+    res.render('home', {query : "", loggedIn : req.session.authenticated});
+    }
+});
+
+app.get('/adminSub/:id/:quantity', isAuthenticated, function(req, res) { // id is from product
+
+    if(req.session.userInfo.is_admin){
+        var stmt2 = 'update product set carried_quantity = carried_quantity - ? where product_id = ?';
+        var data2 = [req.params.quantity, req.params.id];
+        
+        connection.query(stmt2, data2, function(error, result) {
+            if(error) res.json({newGrass:error[0]});
+            else{
+                res.json({newGrass:result[0]});
+            }
+        });
+    }
+    else{
+    res.render('home', {query : "", loggedIn : req.session.authenticated});
+    }
+});
+
 
 
 
