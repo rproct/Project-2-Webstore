@@ -1,5 +1,7 @@
 <div class="p-3 productSm">
-    <img src="/img/compressed_Bentgrass.jpg" alt="Bentgrass" class="productPic">
-    <h3 class="text-center">Bentgrass</h3>
-    <h5 class="text-center">$15/sq. yard</h5>
+    <a href='/productDetail/<%= grass.product_id %>/<%= grass.product_details_id %>'>
+        <img src="<%= grass.image%>" alt="<%= grass.name%>" class="productPic">
+        <h3 class="text-center"><%= grass.name %></h3>
+        <h5 class="text-center"><%-grass.carried_quantity %> in Stock</h5>
+    </a>
 </div>

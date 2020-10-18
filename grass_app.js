@@ -61,7 +61,12 @@ function checkPassword(password, hash){
 
 //HOME
 app.get('/', function(req, res){
-    res.render('home', {query : "", loggedIn : req.session.authenticated});
+    var stmt ="SELECT * FROM product;";
+    connection.query(stmt, function(error, result) {
+       if(error) throw error; 
+       res.render('home', {query : "", loggedIn : req.session.authenticated, grasses : result});
+    });
+    
 });
 
 //*************************************************************** Product queries
@@ -243,7 +248,7 @@ app.post('/register', async function(req, res){
 
 /* Home Route (with login) */
 app.get('/loginHome', isAuthenticated, function(req, res){
-    res.render("home", {query : ""});
+    res.redirect('/');
 });
 
 

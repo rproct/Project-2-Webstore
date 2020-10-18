@@ -7,8 +7,8 @@
         <%- include('templates/topbar')%>
 
         <div class="container d-flex flex-wrap">
-            <% for (var i = 0; i < 16; i++) { %>
-                <%- include('templates/product_small')%>
+            <% for (var i = 0; i < grasses.length; i++) { %>
+                <%- include('templates/product_small', {grass : grasses[i]})%>
             <% } %>
         </div>
     </body>
