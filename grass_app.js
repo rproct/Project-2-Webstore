@@ -365,6 +365,48 @@ app.get('/adminSub/:id/:quantity', isAuthenticated, function(req, res) { // id i
     }
 });
 
+app.post('/productInsert', function(req,res){
+    // /productInsert/:name/:image/:short/:carried/:color/:price/:sq_ft/:long
+    if(req.body.name.length > 30 || req.body.image.length > 200 || req.body.short.length > 50 || (isNaN(req.body.carried)) 
+    || req.body.color.length > 20 || (isNaN(req.body.price)) || (isNaN(req.body.sq_ft)) || req.body.long.length > 500){
+        
+        console.log("data was wrong");
+        return res.redirect("/leAdmin");
+    }
+
+    
+    var data1 = [req.body.color, req.body.price, req.body.sq_ft, req.body.long];
+    var stmt1 = 'insert into product_details (color, price, sq_ft, long_description) values (?, ?, ?, ?);';
+    
+    
+    connection.query(stmt1, data1, function(error1, result1) { // make the details first
+        if(error1) {console.log(error1); res.redirect("/leAdmin");}
+        else{
+            var stmt2 = "select max(product_details_id) as idd from product_details;";
+            
+            connection.query(stmt2, function(error2, result2) {
+                if(error2) {console.log(error2); res.redirect("/leAdmin")}
+                else{
+                    console.log("data for the insert product:", result2[0]["idd"]); // get the product_details_id
+                    
+                    var data3 = [req.body.name, req.body.image, req.body.short, req.body.carried, result2[0]["idd"]];
+                    var stmt3 = "insert into product(name, image, short_desc, carried_quantity, product_details_id) VALUES (?,?,?,?,?);";
+                    
+                    connection.query(stmt3, data3, function(error3, result3) {
+                        if(error3) {console.log(error3); res.redirect("/leAdmin");}
+                        else{
+                            console.log("success!!!! added the thing, check it :", result3);
+                            res.redirect("/leAdmin")
+                        }
+                    })
+                    
+                }
+            });
+            
+        }
+    });
+
+});
 
 
 
