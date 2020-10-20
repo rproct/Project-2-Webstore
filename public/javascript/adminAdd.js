@@ -16,7 +16,7 @@ function addAmount(id){
                     console.log(result);
                     console.log("YES ITS EMPTY MFs");
                     
-                    $('#li'+id).html("<li>"+(Number(amount)+total1)+"<li>");
+                    $('#li'+id).html("<li class='list-group-item'>"+(Number(amount)+total1)+"</li>");
                     alert("The item has successfully updated");
                 },
                 error: function(err){
@@ -48,7 +48,7 @@ function subAmount(id){
                     console.log(result);
                     console.log("YES ITS EMPTY MFs");
                     
-                    $('#li'+id).html("<li>"+(total1-Number(amount))+"<li>");
+                    $('#li'+id).html("<li class='list-group-item'>"+(total1-Number(amount))+"</li>");
                     alert("The item has successfully updated");
                 },
                 error: function(err){

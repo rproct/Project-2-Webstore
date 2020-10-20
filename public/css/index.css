@@ -11,3 +11,13 @@ div.productSm{
 img.productPic{
     width: 100%;
 }
+
+.some_div{
+  height: 250px;
+  width: 250px;
+  margin-bottom: 200px;
+}
+
+.some_background{
+  background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(24, 150, 58, 1));
+}

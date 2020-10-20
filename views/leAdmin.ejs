@@ -1,20 +1,44 @@
-<script src="https://code.jquery.com/jquery.min.js"></script>
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('templates/head')%>
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+    </head>
 
-<h2>Admin??</h2>
-
-<ul>
-    <%grasses.forEach(function(g){%>
-        <div>
-            <h5><%=g.name%></h5>
-            <li><%=g.product_id%></li>
-            <li id="li<%=g.product_id%>"><%=g.carried_quantity%></li>
-            
-            <input id='thing<%=g.product_id%>' type="text">
-            
-            <button onclick='addAmount(<%=g.product_id%>)'>Add by</button>
-            <button onclick='subAmount(<%=g.product_id%>)'>Sub by</button>
+    <body>
+        
+        <div class="container-fluid some_background">
+            <h2 class="display-3">Admin</h2>
+            <div class="alert alert-warning" role="alert">
+              Remember admin, any mistakes reflect on you!
+            </div>
         </div>
-    <%});%>
-</ul>
+        
+        
+        <div class="d-flex flex-wrap">
+        <!--<ul class="d-flex flex-row">-->
+            <!--d-flex align-content-stretch flex-wrap-->
+            <!--d-flex flex-wrap-->
+            <%grasses.forEach(function(g){%>
+            <div class="some_div container">
+                <ul class="list-group border">
+                    <li class="list-group-item"><img class="img-thumbnail" src="<%=g.image%>"/></li>
+                    <h5><%=g.name%></h5>
+                    <li class="list-group-item">Product id: <%=g.product_id%></li>
+                    <div class="center">Amount Available:<li class="list-group-item" id="li<%=g.product_id%>"><%=g.carried_quantity%></li></div>
+                    
+                    <!--<input id='thing<%=g.product_id%>' type="text">-->
+                    <div class="container mx-auto row">
+                    <button class="col" onclick='addAmount(<%=g.product_id%>)'>Add by</button>
+                    <button class="col" onclick='subAmount(<%=g.product_id%>)'>Sub by</button>
+                    </div>
+                                        <input placeholder="Some Positive Number" id='thing<%=g.product_id%>' type="text">
 
-<script SRC="javascript/adminAdd.js"></script>
+                </ul>
+            </div>
+            <%});%>
+        <!--</ul>-->
+        </div>
+        <script SRC="javascript/adminAdd.js"></script>
+    </body>
+</html>
