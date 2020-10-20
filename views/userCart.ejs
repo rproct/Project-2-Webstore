@@ -9,11 +9,11 @@
 
 <ul>
 <%grasses.forEach(function(g){%>
-    <div id='<%=g.product_id%>'>
+    <div id='<%=g.cart_id%>'>
         <h5><%=g.name%></h5>
         <li><%=g.product_id%></li>
         <li><%=g.quantity%></li>
-        <button onclick='deleteItem(<%=g.product_id%>, <%=g.quantity%>)'>Button</button>
+        <button onclick='deleteItem(<%=g.cart_id%>, <%=g.quantity%>)'>Button</button>
     </div>
 <%});%>
 
