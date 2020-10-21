@@ -1,66 +1,84 @@
 <%- include ('templates/head'); -%>
 
+<%- include ('templates/topbar'); -%>
+
 <script src="https://code.jquery.com/jquery.min.js"></script>
 
 
-<%if(authenticated){%>
-    <h3>User logged in.</h3>
-    <h3><%=user.username%></h3>
-    <h2><%=user.user_id%></h2>
-<%}else{%>
-    <h3>User not logged in.</h3>
-<%}%>
 
 
-<h2><%=grassGeneral.name%></h2>
-<img src=<%=grassGeneral.image%> width="200px" height="200px" >
-<h3><%=grassSpecific.price%></h3>
-<h3>Carrying: <%=grassGeneral.carried_quantity%> at <%=grassSpecific.sq_ft%> ft<sup>2</sup> a piece.</h3>
-<h4><%=grassSpecific.color%></h4>
-<h4><%=grassSpecific.long_description%></h4>
+<div class="container">
+    <div class="row">
+        
+    <div class="col">
+    <h2 class="display-4"><%=grassGeneral.name%></h2>
+    <h3>$<%=grassSpecific.price%> for <%=grassSpecific.sq_ft%> ft<sup>2</sup></h3>
+    <img src=<%=grassGeneral.image%> width="500px" height="500px" >
+    </div>
+    
+    <div class="col" style="padding-top:20%;">
+    <h4 id="carrying">Carrying: <%=grassGeneral.carried_quantity%> at <%=grassSpecific.sq_ft%> ft<sup>2</sup> a piece.</h4>
+    <h4><%=grassSpecific.color%></h4>
+    <h3><%=grassSpecific.long_description%></h3>
+
+    <h5 id="carrried" style="color:white;"><%=grassGeneral.carried_quantity%></h5>
 
 
+    <%if(loggedIn && grassGeneral.carried_quantity > 0){%>
+        <!--<form action='addItem'>-->
+            <!--<label>amount</label>-->
+            <input id="thing" type="text" placeholder="How many pieces?">
+            <!--<label>id</label>-->
+    
+            <!--<input type="submit" value="Submit">-->
+        <!--</form>-->
+        <button id="triigger" onclick='addsItem(<%=grassGeneral.product_id%>)'>Button</button>
+    <%}else if(grassGeneral.carried_quantity <= 0){%>
+        <h5>Sorry out of stock</h5>
+    <%}else{%>
+        <a  href='/login'><button>Purchase?</button></a>
+    <%}%>
+    </div>
+    
+    
+    </div>
+</div>
 
-
-<%if(authenticated){%>
-    <!--<form action='addItem'>-->
-        <!--<label>amount</label>-->
-        <input id="thing" type="text">
-        <!--<label>id</label>-->
-
-        <!--<input type="submit" value="Submit">-->
-    <!--</form>-->
-    <button onclick='addsItem(<%=grassGeneral.product_id%>)'>Button</button>
-<%}else{%>
-    <a  href='/login'><button>Button</button></a>
-<%}%>
 
 <script>
 function addsItem(id){
     console.log("THE JAVASCRIPT IS HERE MFs");
+    
+    var carried_quantity = $("#carrried").text()
+    console.log("THE CARRRRIED IS ", carried_quantity)
+    
     var amount = $("#thing").val();
-
-        $(document).ready(function(){
-    
-        $.ajax({
-        method:   "GET",
-        url:      "/userCartAdd/" + id + "/" + amount, //userCartAdd/:id/:amount
-        dataType: "json",
-            success: function(result) {
-                console.log(result);
-                console.log("YES ITS ADDED MFs");
-                
-                // $("#"+id).append("<h5>Deleted<h5>");
-                alert("Your item has being added");
-                
-            },
-            error: function(err){
-                console.log(err);
-            }
-        });
+        if(amount <= carried_quantity){
+            $(document).ready(function(){
         
-    });
-    
+            $.ajax({
+                method:   "GET",
+                url:      "/userCartAdd/" + id + "/" + amount, //userCartAdd/:id/:amount
+                dataType: "json",
+                    success: function(result) {
+                        console.log(result);
+                        console.log("YES ITS ADDED MFs");
+                        
+                        // $("#"+id).append("<h5>Deleted<h5>");
+                        $("#carrried").html(Number(Number(carried_quantity) - Number(amount)));
+                        $("#carrying").html("Carrying: " + Number(Number(carried_quantity) - Number(amount)) + " at <%=grassSpecific.sq_ft%> ft<sup>2</sup> a piece.");
+                        alert("Your item has being added");
+                        
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+            });
+            
+        });
+    } else{
+        alert("Sorry that amount is not supported");
+    }
 }
 </script>
 
