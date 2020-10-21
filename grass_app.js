@@ -150,7 +150,7 @@ app.get('/userCartDelete/:id/:amount', isAuthenticated, function(req, res) {
     
 });
 
-
+/*
 // Used for testing the userCart add and delete
 app.get('/userCS/', isAuthenticated, function(req, res) {
     var userQuery = [req.params.id];
@@ -177,7 +177,7 @@ app.get('/userCS/', isAuthenticated, function(req, res) {
     //     res.json({grass:result, newGRASSSSS:yes});
     // });
 });
-
+*/
 
 //*************************************************************** Login and Register Routes
 
@@ -193,7 +193,16 @@ app.post('/login', async function(req, res){
     if(passwordMatch){
         req.session.authenticated = true;
         req.session.userInfo = isUserExist[0];
-        res.redirect('/');
+        
+        if (req.session.userInfo.is_admin) {
+            
+            res.redirect('/leAdmin');
+            
+        } else {
+            
+            res.redirect('/');
+        }
+        
     }
     else{
         res.render('login', {error: true});
@@ -275,10 +284,10 @@ app.get('/productDetail/:id/:productId', function(req, res) { // first Id is the
                     console.log(result2);
                     if(req.session.authenticated){
                         
-                        res.render('productDetails', {authenticated: true, user: req.session.userInfo, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
+                        res.render('productDetails', {loggedIn: true, user: req.session.userInfo, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
                     }
                     else{
-                        res.render('productDetails', {authenticated: false, grassSpecific: result1[0], grassGeneral: result2[0]});
+                        res.render('productDetails', {loggedIn: false, grassSpecific: result1[0], grassGeneral: result2[0]});
                     }
                 }
             });
