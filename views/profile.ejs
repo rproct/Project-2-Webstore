@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('templates/head')%>
+    </head>
+    <body>
+        <%- include('templates/topbar')%>
+        <h1> Home Page </h1>
+        <h4> User ID: <%= user.user_id %></h4>
+        <h4> Name: <%= user.first_name %> <%= user.last_name %></h4>
+        <h4> Address: <%= user.address %></h4>
+        <h4> Username: <%= user.username %></h4>
+    </body>
+</html>

@@ -58,6 +58,43 @@ function checkPassword(password, hash){
     });
 }
 
+function containsSpecialCharacters(str){
+    var regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g;
+	return regex.test(str);
+}
+
+function isLetter(str) {
+  return str.length === 1 && str.match(/[a-z]/i);
+}
+
+function passwordIsValid(password) {
+    var letterCount = 0;
+    var numberCount = 0;
+    var specialCount = 0;
+    var setVals = false;
+    
+    for(var i = 0; i < password.length; i++) {
+        let char = password[i];
+        if(isNaN(parseInt(char))) {
+            if(containsSpecialCharacters(char)) {
+                specialCount += 1;
+            } else {
+                letterCount += 1;
+            }
+            
+        } else {
+            numberCount += 1;
+        }
+        
+        if(numberCount > 0 && letterCount > 0 && specialCount > 0) {
+            setVals = true;
+        }
+    }
+    
+    return setVals && password.length > 6;
+    
+}
+
 //-------------------------------- PATHS
 
 //HOME
@@ -229,6 +266,7 @@ app.post('/register', async function(req, res){
     
     var dbQueryResult = await checkUsername(username);
     var areSame = password === passwordConfirm;
+    var validPassword = passwordIsValid(password);
     
     let issueRedirect = "/register?issue=";
     
@@ -241,6 +279,11 @@ app.post('/register', async function(req, res){
     //If the passwords do no match, the user will be redirected back to the register page and will see a message
     if(!areSame) {
         res.redirect(issueRedirect + "passwords+do+not+match");
+        return;
+    }
+    
+    if(!validPassword) {
+        res.redirect(issueRedirect + "password+is+invalid");
         return;
     }
     
@@ -308,6 +351,15 @@ app.get('/userCart', function(req, res) {
             res.render('userCart', {user: req.session.userInfo, grasses: result});
         }
     });
+});
+
+app.get("/userDetails", isAuthenticated, function(req, res) {
+
+    if(isAuthenticated) {
+        res.render('profile', {user: req.session.userInfo, loggedIn : isAuthenticated});
+    } else {
+        res.redirect('/');
+    }
 });
 
 
