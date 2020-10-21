@@ -21,3 +21,37 @@ img.productPic{
 .some_background{
   background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(24, 150, 58, 1));
 }
+
+.btn-success {
+    border-color: #e7e7e7;
+    border-width: 2px;
+}
+
+.btn-top-rght {
+    position: absolute;
+    right: 1%;
+    top: 3%;
+    
+    background-color: green !important;
+}
+
+.btn-top-rght:hover {
+    position: absolute;
+    right: 1%;
+    top: 3%;
+    background-color: #00cc44 !important;
+    border-color: white !important;
+}
+
+.txt-align-rght {
+    text-align: right;
+}
+
+.txt-sign-up {
+    color: #404040;
+}
+
+hr {
+    padding: 0px;
+    margin: 0px;    
+}
