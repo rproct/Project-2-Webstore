@@ -61,3 +61,27 @@ function subAmount(id){
     }
     
 }
+
+function deleteItem(id) {
+    $(document).ready(function(){
+        
+        
+            $.ajax({
+            method:   "GET",
+            url:      "/adminDelete/" + id ,
+            dataType: "json",
+                success: function(result) {
+                    console.log(result);
+                    console.log("YES ITS EMPTY MFs");
+                    $('#wholeItem'+id).hide();
+                    
+                    alert("The item was deleted!");
+                },
+                error: function(err){
+                    console.log(err);
+                    alert("The item was not successfully deleted, refer to an operator");
+                }
+            });
+            
+        });
+}

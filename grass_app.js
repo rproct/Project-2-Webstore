@@ -26,7 +26,8 @@ const connection = mysql.createConnection({
     host: process.env.HOST, //local
     user: process.env.USERNAME,
     password: process.env.PASSWORD,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+    multipleStatements : true
 });
 connection.connect(); 
 
@@ -363,6 +364,29 @@ app.get('/adminSub/:id/:quantity', isAuthenticated, function(req, res) { // id i
     else{
     res.render('home', {query : "", loggedIn : req.session.authenticated});
     }
+});
+
+app.get('/adminDelete/:prodId', isAuthenticated, function(req, res) {
+   if(req.session.userInfo.is_admin) {
+       let prodId = req.params.prodId;
+       var stmt = "SELECT product_details_id FROM product WHERE product_id = ?;";
+       var data = [prodId];
+       connection.query(stmt, data, function(error, result){
+           if(error) throw error;
+           var deleteStmt = "DELETE FROM shopping_cart WHERE product_id = ?;" + 
+                            "DELETE FROM product WHERE product_id = ?;" + 
+                            "DELETE FROM product_details where product_details_id = ?;";
+            
+           data = [prodId, prodId, result[0].product_details_id];
+           connection.query(deleteStmt, data, function(error, result) {
+               if(error) throw error;
+               
+               res.json({deletion : result[0]});
+           });
+       });
+   } else {
+       res.redirect('/');
+   }
 });
 
 app.post('/productInsert', function(req,res){

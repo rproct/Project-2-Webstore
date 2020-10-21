@@ -50,7 +50,7 @@
             <!--d-flex align-content-stretch flex-wrap-->
             <!--d-flex flex-wrap-->
             <%grasses.forEach(function(g){%>
-            <div class="some_div container">
+            <div class="some_div container" id="wholeItem<%=g.product_id%>">
                 <ul class="list-group border">
                     <li class="list-group-item"><img class="img-thumbnail" src="<%=g.image%>"/></li>
                     <h5><%=g.name%></h5>
@@ -59,11 +59,12 @@
                     
                     <!--<input id='thing<%=g.product_id%>' type="text">-->
                     <div class="container mx-auto row">
-                    <button class="col" onclick='addAmount(<%=g.product_id%>)'>Add by</button>
-                    <button class="col" onclick='subAmount(<%=g.product_id%>)'>Sub by</button>
+                        <button class="col" onclick='addAmount(<%=g.product_id%>)'>Add by</button>
+                        <button class="col" onclick='subAmount(<%=g.product_id%>)'>Sub by</button>
                     </div>
-                                        <input placeholder="Some Positive Number" id='thing<%=g.product_id%>' type="text">
-
+                    <input placeholder="Some Positive Number" id='thing<%=g.product_id%>' type="text">
+                    <button onclick='deleteItem(<%=g.product_id%>)' class="btn btn-danger">Delete</button>
+                    
                 </ul>
             </div>
             <%});%>
