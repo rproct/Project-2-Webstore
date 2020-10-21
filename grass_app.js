@@ -315,7 +315,8 @@ app.get('/leAdmin', function(req, res) {
     
     try { // many answers to the same thing
         if(!(req.session.userInfo.is_admin)){
-            res.render('home', {query : "", loggedIn : req.session.authenticated});
+            // res.render('home', {query : "", loggedIn : req.session.authenticated});
+            res.redirect("/");
         }
         else{
             var stmt = "select * from product;";
@@ -330,7 +331,8 @@ app.get('/leAdmin', function(req, res) {
     }
     catch(err) {
         console.log("Failed to sign in");
-        res.render('home', {query : "", loggedIn : req.session.authenticated});
+        // res.render('home', {query : "", loggedIn : req.session.authenticated});
+        res.redirect("/");
     }
 
     
