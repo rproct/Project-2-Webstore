@@ -1,6 +1,6 @@
-function deleteItem(id, amount){
+function deleteItem(id, amount, productID){
     console.log("THE JAVASCRIPT IS HERE MFs");
-    console.log(id, amount);
+    console.log(id, amount, productID);
     
     // var toDelete = $("#"+id).val();
     
@@ -8,7 +8,7 @@ function deleteItem(id, amount){
     
         $.ajax({
         method:   "GET",
-        url:      "/userCartDelete/" + id + "/" + amount, //userCartDelete/:id/:amount
+        url:      "/userCartDelete/" + id + "/" + amount + "/" + productID, //userCartDelete/:id/:amount
         dataType: "json",
             success: function(result) {
                 console.log(result);

@@ -173,11 +173,13 @@ app.get('/userCartAdd/:id/:amount/:price', isAuthenticated, function(req, res) {
     
 });
 
-app.get('/userCartDelete/:id/:amount', isAuthenticated, function(req, res) {
+app.get('/userCartDelete/:id/:amount/:productID', isAuthenticated, function(req, res) {
     var stmt = 'delete from shopping_cart where cart_id = ?;';
     
     var stmt2 = 'update product set carried_quantity = carried_quantity + ? where product_id = ?';
-    var data2 = [req.params.amount, req.params.id];
+    var total = parseInt(req.params.amount);
+    var prodId = parseInt(req.params.productID);
+    var data2 = [total, prodId];
     
     connection.query(stmt, req.params.id, function(error, result) {
         if(error) throw error;
