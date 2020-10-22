@@ -46,19 +46,21 @@
 
 
 <script>
-function addsItem(id){
+function addsItem(id, price){
     console.log("THE JAVASCRIPT IS HERE MFs");
     
     var carried_quantity = $("#carrried").text()
-    console.log("THE CARRRRIED IS ", carried_quantity)
+    carried_quantity = parseInt(carried_quantity);
     
     var amount = $("#thing").val();
-        if(amount <= carried_quantity){
+    amount = parseInt(amount);
+
+        if(amount <= carried_quantity && amount > 0){
             $(document).ready(function(){
         
             $.ajax({
                 method:   "GET",
-                url:      "/userCartAdd/" + id + "/" + amount, //userCartAdd/:id/:amount
+                url:      "/userCartAdd/" + id + "/" + amount + "/" + price, //userCartAdd/:id/:amount/:price
                 dataType: "json",
                     success: function(result) {
                         console.log(result);
