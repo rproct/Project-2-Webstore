@@ -2,37 +2,54 @@
 <html>
     <head>
         <title>Register Page</title>
-        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <%- include('templates/head')%>
     </head>
     
     <body>
-        <h1>Register for your own grasslands account!</h1>
-        
-        <form action='/register' method='POST'>
-            <h5>First Name: </h5>
-            <input type='text' id='firstname' name='firstname' placeholder='Ex. Bob' required>
-            <br>
-            <h5>Last Name: </h5>
-            <input type='text' id='lastname' name='lastname' placeholder='Ex. Smith' required>
-            <br>
-            <h5>Address: </h5>
-            <input type='text' id='address' name='address' placeholder='Ex. 11 Fake Lane, Fake City, CA' required>
-            <br>
-            <h5>Your new username: </h5>
-            <input type='text' id='username' name='username' placeholder="Ex. newUser123" required>
-            <br>
-            <h5>Your password: </h5>
-            <input type='password' id='password' name='password' placeholder='password' required>
-            <h5>Confirm password: </h5>
-            <input type='password' id='passwordConfirm' name='passwordConfirm' placeholder='password' required>
-            <br>
-            <button type='submit'>Register!</button>
-        </form>
-        
+        <div id='titleText' class='jumbotron some_background'>
+            <h1 class='text-center'>Register for your own <br> grasslands account!</h1>
+        </div>
         <% if(issue !== "none") { %>
-        <h5 id='createAccountError'><%= issue %></h5>
+            <p id='createAccountError' class='alert alert-secondary' role='alert'><%= issue %></p>
         <% } %>
+        <form action='/register' method='POST' style='margin-left:25%;'>
+            <div class='form-row'>
+                <div class='form-group col-md-4'>
+                    <label for='firstname'>First Name: </label>
+                    <input type='text' id='firstname' name='firstname' class='form-control' placeholder='Ex. Bob' required>
+                </div>
+                <div class='form-group col-md-4'>
+                    <label for='lastname'>Last Name: </label>
+                    <input type='text' id='lastname' name='lastname' class='form-control' placeholder='Ex. Smith' required>
+                </div>
+            </div>
+            <div class='form-row'>
+                <div class='form-group col-md-4'>
+                    <label for='address'>Address: </label>
+                    <input type='text' id='address' name='address' class='form-control' placeholder='Ex. 11 Fake Lane, Fake City, CA' required>
+                </div>
+                <div class='form-group col-md-4'>
+                    <label for='username'>Username: </label>
+                    <input type='text' id='username' name='username' class='form-control' placeholder="Ex. newUser123" required>
+                </div>
+            </div>
+            <div class='form-row'>
+                <div class='form-group col-md-4'>
+                    <label for='password'>Your password:</label>
+                    <input type='password' id='password' name='password' class='form-control' placeholder='password' required>
+                </div>
+                <div class='form-group col-md-4'>
+                    <label for='passwordConfirm'>Confirm password:</label>
+                    <input type='password' id='passwordConfirm' name='passwordConfirm' class='form-control' placeholder='password' required>
+                </div>
+            </div>
+            <br>
+            <button type='submit' class='btn btn-outline-dark'>Register!</button>
+        </form>
+        <br>
+        <a href='/'>
+            <button  class='btn btn-primary' style='margin-left:25%'>Go Back Home</button>
+        </a>
     </body>
 
 </html>

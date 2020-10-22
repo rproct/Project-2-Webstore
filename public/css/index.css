@@ -1,9 +1,16 @@
-h1#sitename{
+#titleText, h1#sitename{
     font-family: 'Pacifico', cursive;
     color: darkgreen;
 }
 
-
+#createAccountError {
+    margin-left: 25%;
+    margin-right: 25%;
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+    
+}
 
 #siteBtn:visited, #siteBtn:link, #siteBtn:hover, #siteBtn:active {
     font-family: 'Pacifico', cursive;
@@ -74,7 +81,7 @@ img.productPic{
 }
 
 .green-txt {
-    color: green;
+    color: green !important;
 }
 
 .profile-txt {
