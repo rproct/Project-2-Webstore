@@ -9,4 +9,4 @@ Link to Github Repository:
 https://github.com/rproct/Project-2-Webstore
 
 Link to Heroku:
-(Under development still, coming soon)
+https://lit-cove-13782.herokuapp.com/
