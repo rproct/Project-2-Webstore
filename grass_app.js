@@ -101,7 +101,7 @@ function passwordIsValid(password) {
 app.get('/', function(req, res){
     var stmt ="SELECT * FROM product;";
     connection.query(stmt, function(error, result) {
-       if(error) throw error; 
+       if(error) throw error;
        res.render('home', {query : "", loggedIn : req.session.authenticated, grasses : result});
     });
     
@@ -354,7 +354,7 @@ app.get('/userCart', function(req, res) {
         if(error) throw error;
         else{
             console.log(result);
-            res.render('userCart', {user: req.session.userInfo, grasses: result});
+            res.render('userCart', {user: req.session.userInfo, grasses: result, loggedIn : req.session.authenticated});
         }
     });
 });
