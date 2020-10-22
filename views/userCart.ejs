@@ -10,7 +10,7 @@
 <ul>
 <% var subtotal = 0%>
 <%grasses.forEach(function(g){%>
-    <% subtotal += g.price %>
+    <% subtotal += g.price * 100 %>
     <div id='<%=g.cart_id%>'>
         <h5><%=g.name%></h5>
         <li><%=g.product_id%></li>
@@ -20,7 +20,7 @@
     </div>
 <%});%>
 
-<h5>Subtotal: $<%= subtotal %></h5>
+<h5>Subtotal: $<%= subtotal / 100 %></h5>
 
 </ul>
 
