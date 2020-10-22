@@ -149,11 +149,15 @@ app.get('/getSpecificSearch/:id', function(req, res) {
 
 
 app.get('/userCartAdd/:id/:amount/:price', isAuthenticated, function(req, res) {
+    var amount = parseInt(req.params.amount);
+    var price = parseFloat(req.params.price);
+    price = price * 100;
+    
     var user = req.session.userInfo;
-    var total = req.params.amount * req.params.price;
-    console.log(total);
+    var total =  amount * price / 100;
+
     var stmt = 'insert into shopping_cart (product_id, user_id, quantity, price) values (?, ?, ?, ?)';
-    var data = [req.params.id, user.user_id, req.params.amount, total];
+    var data = [req.params.id, user.user_id, amount, total];
     
     var stmt2 = 'update product set carried_quantity = carried_quantity - ? where product_id = ?';
     var data2 = [req.params.amount, req.params.id];
@@ -343,7 +347,7 @@ app.get('/productDetail/:id/:productId', function(req, res) { // first Id is the
 app.get('/userCart', function(req, res) {
     var user = [req.session.userInfo.user_id];
     var stmt = "SELECT *" + 
-    " from (SELECT shopping_cart.user_id, shopping_cart.cart_id, shopping_cart.product_id, shopping_cart.quantity, product.image, product.name, product.short_desc"+
+    " from (SELECT shopping_cart.user_id, shopping_cart.cart_id, shopping_cart.product_id, shopping_cart.quantity, shopping_cart.price, product.image, product.name, product.short_desc"+
     " FROM shopping_cart inner join product on shopping_cart.product_id=product.product_id) as tbl1 where tbl1.user_id= ?;";
     // FROM SELECT * FROM shopping_cart WHERE user_id=?;
     connection.query(stmt, user, function(error, result) {
