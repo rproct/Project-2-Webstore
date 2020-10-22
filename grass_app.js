@@ -148,10 +148,12 @@ app.get('/getSpecificSearch/:id', function(req, res) {
 });
 
 
-app.get('/userCartAdd/:id/:amount', isAuthenticated, function(req, res) {
+app.get('/userCartAdd/:id/:amount/:price', isAuthenticated, function(req, res) {
     var user = req.session.userInfo;
-    var stmt = 'insert into shopping_cart (product_id, user_id, quantity) values (?, ?, ?)';
-    var data = [req.params.id, user.user_id, req.params.amount];
+    var total = req.params.amount * req.params.price;
+    console.log(total);
+    var stmt = 'insert into shopping_cart (product_id, user_id, quantity, price) values (?, ?, ?, ?)';
+    var data = [req.params.id, user.user_id, req.params.amount, total];
     
     var stmt2 = 'update product set carried_quantity = carried_quantity - ? where product_id = ?';
     var data2 = [req.params.amount, req.params.id];

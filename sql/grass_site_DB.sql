@@ -36,6 +36,7 @@ create table product_details (
     product_id   integer,
     user_id      integer,
     quantity     integer,
+    price        numeric(8,2),
     foreign key (product_id) references product(product_id),
     foreign key (user_id) references user(user_id)
   );
