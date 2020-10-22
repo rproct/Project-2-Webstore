@@ -5,10 +5,47 @@
     </head>
     <body>
         <%- include('templates/topbar')%>
-        <h1> Home Page </h1>
-        <h4> User ID: <%= user.user_id %></h4>
-        <h4> Name: <%= user.first_name %> <%= user.last_name %></h4>
-        <h4> Address: <%= user.address %></h4>
-        <h4> Username: <%= user.username %></h4>
+        
+        <div class="circle-position"></div>
+        
+        
+        <div class='jumbotron white_background'>
+				<h1 class="text-center green-txt">
+                	<%= user.first_name %>'s Profile
+            	</h1>
+		</div>
+        
+        <div class='container text-center'>
+				<div class="row justify-content-md-center">
+				    <div class="col col-lg-2">
+				    </div>
+				    
+				    <div class="col-md-auto txt-sign-up">
+				    	
+				    	
+				    	
+				    	<i class="fas fa-user user-profile-pic user-profile-circle" style=""></i>
+				    	
+				    	<div class="user-background">
+				    		
+				    		<div class="profile-txt">
+				    	
+	        				    <h4> User's ID: <%= user.user_id %></h4>
+	        				    <h4> Username: <%= user.username %></h4>
+	                            <h4> Full Name: <%= user.first_name %> <%= user.last_name %></h4>
+	                            <h4> Address: <%= user.address %></h4>
+                        	
+                        	</div>
+                        
+                        </div>
+				    	
+				    </div>
+				    
+				    <div class="col col-lg-2">
+				    </div>
+				</div>
+
+			</div>
+			
     </body>
 </html>
