@@ -129,7 +129,6 @@ app.get('/getProductSearch', function(req, res) {
     
     connection.query(stmt, keywords, function(error, result) {
         if(error) throw error;
-        console.log(result); // just to see what it is
         
         res.render('search', {grass : result, term : req.query.keywords, loggedIn : req.session.authenticated})
     });
@@ -141,7 +140,7 @@ app.get('/getSpecificSearch/:id', function(req, res) {
     
     connection.query(stmt, userQuery, function(error, result) {
         if(error) throw error;
-        console.log(result); // just to see what it is 
+
         
         res.json({grass:result[0]});
     });
@@ -323,14 +322,12 @@ app.get('/productDetail/:id/:productId', function(req, res) { // first Id is the
     connection.query(stmt, userQuery, function(error1, result1) {
         if(error1) throw error1;
         else{
-            console.log(result1); // to see what it is 
             
             var userQuery2 = [req.params.id];
             var stmt2 = "SELECT * FROM product WHERE product_id = ?;";
             connection.query(stmt2, userQuery2, function(error2, result2) {
                 if(error2) throw error2;
                 else{
-                    console.log(result2);
                     if(req.session.authenticated){
                         
                         res.render('productDetails', {loggedIn: true, user: req.session.userInfo, grassSpecific: result1[0], grassGeneral: result2[0]}); // need a productDetails view
@@ -353,7 +350,6 @@ app.get('/userCart', function(req, res) {
     connection.query(stmt, user, function(error, result) {
         if(error) throw error;
         else{
-            console.log(result);
             res.render('userCart', {user: req.session.userInfo, grasses: result, loggedIn : req.session.authenticated});
         }
     });
@@ -382,7 +378,6 @@ app.get('/leAdmin', function(req, res) {
             connection.query(stmt, function(error, result){
                 if(error) throw error;
                 else{
-                    console.log("admin logged in");
                     res.render('leAdmin', {grasses: result});
                 }
             });
@@ -461,7 +456,6 @@ app.post('/productInsert', function(req,res){
     if(req.body.name.length > 30 || req.body.image.length > 200 || req.body.short.length > 50 || (isNaN(req.body.carried)) 
     || req.body.color.length > 20 || (isNaN(req.body.price)) || (isNaN(req.body.sq_ft)) || req.body.long.length > 500){
         
-        console.log("data was wrong");
         return res.redirect("/leAdmin");
     }
 
@@ -478,7 +472,6 @@ app.post('/productInsert', function(req,res){
             connection.query(stmt2, function(error2, result2) {
                 if(error2) {console.log(error2); res.redirect("/leAdmin")}
                 else{
-                    console.log("data for the insert product:", result2[0]["idd"]); // get the product_details_id
                     
                     var data3 = [req.body.name, req.body.image, req.body.short, req.body.carried, result2[0]["idd"]];
                     var stmt3 = "insert into product(name, image, short_desc, carried_quantity, product_details_id) VALUES (?,?,?,?,?);";
@@ -486,7 +479,6 @@ app.post('/productInsert', function(req,res){
                     connection.query(stmt3, data3, function(error3, result3) {
                         if(error3) {console.log(error3); res.redirect("/leAdmin");}
                         else{
-                            console.log("success!!!! added the thing, check it :", result3);
                             res.redirect("/leAdmin")
                         }
                     })
