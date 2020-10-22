@@ -32,7 +32,7 @@
     
             <!--<input type="submit" value="Submit">-->
         <!--</form>-->
-        <button id="triigger" onclick='addsItem(<%=grassGeneral.product_id%>, <%=grassSpecific.price%>)'>Button</button>
+        <button id="triigger" onclick='addsItem(<%=grassGeneral.product_id%>)'>Button</button>
     <%}else if(grassGeneral.carried_quantity <= 0){%>
         <h5>Sorry out of stock</h5>
     <%}else{%>
@@ -46,21 +46,19 @@
 
 
 <script>
-function addsItem(id, price){
+function addsItem(id){
     console.log("THE JAVASCRIPT IS HERE MFs");
     
     var carried_quantity = $("#carrried").text()
-    carried_quantity = parseInt(carried_quantity);
+    console.log("THE CARRRRIED IS ", carried_quantity)
     
     var amount = $("#thing").val();
-    amount = parseInt(amount);
-
-        if(amount <= carried_quantity && amount > 0){
+        if(amount <= carried_quantity){
             $(document).ready(function(){
         
             $.ajax({
                 method:   "GET",
-                url:      "/userCartAdd/" + id + "/" + amount + "/" + price, //userCartAdd/:id/:amount/:price
+                url:      "/userCartAdd/" + id + "/" + amount, //userCartAdd/:id/:amount
                 dataType: "json",
                     success: function(result) {
                         console.log(result);
