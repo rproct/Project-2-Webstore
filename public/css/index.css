@@ -23,7 +23,16 @@ div.productSm{
     box-shadow: 0px 5px 5px grey;
 }
 
+div.crop{
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    height: 200px;
+}
+
 img.productPic{
+    height: 100%;
     width: 100%;
 }
 
@@ -112,4 +121,8 @@ hr {
     line-height: 100px;
     vertical-align: middle;
     padding: 70px;
+}
+
+h5.cartInfo{
+    display: block;
 }

@@ -1,27 +1,40 @@
-<script src="https://code.jquery.com/jquery.min.js"></script>
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('templates/head')%>
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+    </head>
 
-<h2>User Cart</h2>
+    <body class="bg-light">
+        <%- include('templates/topbar', {query: "", loggedIn : loggedIn})%>
+        <div class="container">
+            <h2><%=user.username%>'s Cart</h2>
 
-<h3><%=user.username%></h3>
-<h3><%=user.user_id%></h3>
+<!--            <h3></h3>-->
+<!--            <h3><%=user.user_id%></h3>-->
 
+            <% var subtotal = 0%>
+            <%grasses.forEach(function(g){%>
+                <% subtotal += g.price %>
+                <div id='<%=g.cart_id%>' class="mt-3 mb-3">
+                    <h3><%=g.name%></h3>
+                    <div class="row">
+                        <div class="crop col-md-4">
+                                <img src="<%= g.image%>" alt="<%= g.name%>" class="productPic mx-auto d-block">
+                        </div>
+    <!--                    <%=g.product_id%>-->
+                        <div class="col-md-8">
+                        <h5>Quantity: <%=g.quantity%></h5>
+                        <button onclick='deleteItem(<%=g.cart_id%>, <%=g.quantity%>)'>Remove</button>
+                        <h5>Price: $<%=g.price%></h5>
+                        </div>
+                    </div>
+                </div>
+            <%});%>
 
+            <h3>Subtotal: $<%= subtotal.toFixed(2) %></h5>
 
-<ul>
-<% var subtotal = 0%>
-<%grasses.forEach(function(g){%>
-    <% subtotal += g.price %>
-    <div id='<%=g.cart_id%>'>
-        <h5><%=g.name%></h5>
-        <li><%=g.product_id%></li>
-        <li><%=g.quantity%></li>
-        <li>$<%=g.price%></li>
-        <button onclick='deleteItem(<%=g.cart_id%>, <%=g.quantity%>)'>Button</button>
-    </div>
-<%});%>
-
-<h5>Subtotal: $<%= subtotal %></h5>
-
-</ul>
-
-<script SRC="javascript/remove.js"></script>
+            <script SRC="javascript/remove.js"></script>
+        </div>
+    </body>
+</html>
